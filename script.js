@@ -3,11 +3,9 @@ import PromptSync from 'prompt-sync';
 // Variables:
 const prompt = PromptSync();
 var waterBottles = [];
-var availableTaps = 0;
-var tapRates = [];
+var availableTaps = [];
 
 // Functions:
-
 function isValidInteger(number){
     return !isNaN(number) && number > 0;
 }
@@ -51,7 +49,7 @@ while (true) {
 
     if (input === '0' || input === '') {
         if (waterBottles.length === 0) {
-            console.log("\x1b[31mYou must enter at least one valid bottle before finishing.\x1b[0m");
+            throwErrorMessage("You must enter at least one valid bottle before finishing.");
             continue;
         }
         break; 
@@ -70,33 +68,35 @@ while (true) {
     }
 }
 
-// Loop for getting the number of available taps
+console.log("\n\x1b[33mNow we are going to register the taps.");
+console.log("The flow rate for each tap should be between 50ml/s and 250ml/s.\x1b[0m");
+
+// Loop for getting the taps and their flow rates
 while (true) {
-    let inputTaps = prompt("\nHow many taps are available at the festival? (Ex: 3): ").trim();
-    availableTaps = parseInt(inputTaps, 10);
+    console.log(`\n\x1b[34mTap #${availableTaps.length + 1}:\x1b[0m`);
+    let input = prompt("Flow rate in ml/s (or '0' to finish): ").trim();
+
+    if (input === '0' || input === '') {
+        if (availableTaps.length === 0) {
+            throwErrorMessage("You must enter at least one valid tap.");
+            continue;
+        }
+        break; 
+    }
+
+    let flowRateInput = parseInt(input, 10);
 
     //Input validation
-    if (!isValidInteger(availableTaps)) {
-        throwErrorMessage("Invalid number! type a valid integer greater than 0.");
-    } else if(availableTaps > 200) {
-        throwErrorMessage(`${availableTaps} is a really unbelievable number of taps. Try something bellow 50.`);
+    if (!isValidInteger(flowRateInput)) {
+        throwErrorMessage("Invalid input! The text you provided is not a valid number.");
+    } else if(flowRateInput < 50 || flowRateInput > 250) {
+        throwErrorMessage("Invalid input! Type a number between 50 and 250.");
         continue;
     } else {
-        break;
+       availableTaps.push(flowRateInput);
     }
 }
 
-// Setting a random flow rate for each tap
-console.log("\n\x1b[34mRandomly generated flow rates of the taps:\x1b[0m");
-for (let i = 0; i < availableTaps; i++) {
-    let minRate = 5; 
-    let maxRate = 25; 
-    let randomRate = (Math.floor(Math.random() * (maxRate - minRate + 1)) + minRate) * 10;
-    
-    tapRates.push(randomRate);
-    console.log(`Tap #${i + 1}: ${randomRate}ml/s`);
-}
-
 // Printing the response to the console:
-var finalResponse = calculateTotalTime(waterBottles, tapRates);
+var finalResponse = calculateTotalTime(waterBottles, availableTaps);
 console.log(`\n\x1b[32mThe total amount of time to fill all bottles is: ${finalResponse}s\x1b[0m`);
