@@ -12,8 +12,8 @@ function isValidInteger(number){
     return !isNaN(number) && number > 0;
 }
 
-function throwErrorMessage(){
-    console.log("\n\x1b[31mInvalid input! Please enter an integer greater than 0.\x1b[0m");
+function throwErrorMessage(message){
+    console.log(`\n\x1b[31m${message}\x1b[0m`);
 }
 
 function calculateTotalTime(waterBottles, tapRates){
@@ -60,10 +60,13 @@ while (true) {
     let mililitersInput = parseInt(input, 10);
 
     //Input validation
-    if (isValidInteger(mililitersInput)) {
-        waterBottles.push(mililitersInput);
+    if (!isValidInteger(mililitersInput)) {
+        throwErrorMessage("Invalid input! Please enter an integer greater than 0.");
+    } else if(mililitersInput > 5000) {
+        throwErrorMessage("I don't think anyone would bring a water bottle this big to a festival. Try a number bellow 5000 ml.");
+        continue;
     } else {
-        throwErrorMessage();
+       waterBottles.push(mililitersInput);
     }
 }
 
@@ -73,15 +76,18 @@ while (true) {
     availableTaps = parseInt(inputTaps, 10);
 
     //Input validation
-    if (isValidInteger(availableTaps)) {
-        break; 
+    if (!isValidInteger(availableTaps)) {
+        throwErrorMessage("Invalid number! type a valid integer greater than 0.");
+    } else if(availableTaps > 200) {
+        throwErrorMessage(`${availableTaps} is a really unbelievable number of taps. Try something bellow 50.`);
+        continue;
     } else {
-        throwErrorMessage();
+        break;
     }
 }
 
 // Setting a random flow rate for each tap
-console.log("\n\x1b[34mRandomly generated taps flow rates\x1b[0m");
+console.log("\n\x1b[34mRandomly generated flow rates of the taps:\x1b[0m");
 for (let i = 0; i < availableTaps; i++) {
     let minRate = 5; 
     let maxRate = 25; 
