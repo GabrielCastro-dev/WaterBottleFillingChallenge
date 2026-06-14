@@ -100,15 +100,3 @@ while (true) {
 // Printing the response to the console:
 var finalResponse = calculateTotalTime(waterBottles, availableTaps);
 console.log(`\n\x1b[32mThe total amount of time to fill all bottles is: ${finalResponse}s\x1b[0m`);
-
-/*
-In the 4th step of the bonus points, we are asked if increasing the pressure (or flow rate) of one of the taps will cause the algorithm to output a larger number. The short answer is no.
-
-First of all, while increasing a tap's flow rate reduces the time it takes to fill a bottle, it does not guarantee that the tap will actually be used. Let's consider a scenario with three bottles with capacities of 250ml, 300ml, and 1000ml, respectively. In this scenario, we register seven taps with flow rates of 100, 50, 250, 100, 50, 245, and 180 ml/s. Only the first three taps would be used. Taking into account the walking time to each tap, the total time to fill all three bottles would be 8 seconds.
-
-This happens because we are following the guideline established in the 3rd bonus point:
-
-“...You should still assume that each person uses the first available tap.”
-
-Therefore, using our previous example, if we increase the pressure of the last tap from 180ml/s to 200ml/s, it will have no impact on the outcome. A real change only occurs when we increase the flow rate of a tap that is actually utilized. For instance, increasing the pressure of the second tap from 50ml/s to 100ml/s would reduce the total time to 6 seconds.
-*/
